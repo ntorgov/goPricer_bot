@@ -28,7 +28,7 @@ jobs:
       run: go build -v ./...
 
     - name: Deploy to Google App Engine
-      uses: etereo-io/deploy-gae-action@v2.0.4
+      uses: etereo-io/deploy-gae-action@v2.0.5
       with:
         # Service account file
         service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
