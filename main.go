@@ -33,7 +33,7 @@ func main() {
 	updates := bot.GetUpdatesChan(u)
 
 	for update := range updates {
-		if update.Message != nil { // If we got a message
+		if update.Message != nil {
 
 			msg := tgbotapi.NewMessage(update.Message.Chat.ID, "")
 
@@ -78,15 +78,15 @@ func main() {
 					continue
 				}
 
+				// region Price calculation
+
 				normalPrice := priceValue * 1000 / priceVolume
 
 				log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-				msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Цена за 1000 единиц %.2f", normalPrice))
-				// msg.ReplyToMessageID = update.Message.MessageID
+				msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Цена за 1000 единиц: %.2f", normalPrice))
 
-				// break
-				// }
+				// endregion
 			}
 
 			bot.Send(msg)
