@@ -35,7 +35,7 @@ jobs:
         # Project id
         project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
         # Debug action
-        # debug: true # optional, default is 
+        debug: '' # optional, default is 
         # Path to the yaml file
         # gae_config_path: # default is ./app.yaml
         # Disable cache
