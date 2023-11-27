@@ -64,7 +64,7 @@ func main() {
 
 				priceVolume, err := strconv.ParseFloat(command[0], 64)
 				if err != nil {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял #1...")
+					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял параметр #1...")
 					msg.ReplyToMessageID = update.Message.MessageID
 					bot.Send(msg)
 					continue
@@ -72,7 +72,7 @@ func main() {
 
 				priceValue, err := strconv.ParseFloat(command[1], 64)
 				if err != nil {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял #2...")
+					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял параметр #2...")
 					msg.ReplyToMessageID = update.Message.MessageID
 					bot.Send(msg)
 					continue
