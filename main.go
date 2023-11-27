@@ -52,13 +52,6 @@ func main() {
 				continue
 			}
 
-			// switch update.Message.Text {
-			//case "/help":
-			//	msg := tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Формат ввода *Вес на ценнике*, через пробел, *Цена за этот вес*"))
-			//	// msg.ReplyToMessageID = update.Message.MessageID
-			//	bot.Send(msg)
-			//	break
-			//default:
 			if !update.Message.IsCommand() {
 				command := strings.Split(update.Message.Text, " ")
 
@@ -76,8 +69,7 @@ func main() {
 					bot.Send(msg)
 					continue
 				}
-				// 123г = 150
-				// 1000 = x
+
 				priceValue, err := strconv.ParseFloat(command[1], 64)
 				if err != nil {
 					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял #2...")
