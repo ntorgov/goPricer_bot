@@ -26,3 +26,17 @@ jobs:
 
     - name: Build
       run: go build -v ./...
+
+    - name: Deploy to Google App Engine
+      uses: etereo-io/deploy-gae-action@v2.0.4
+      with:
+        # Service account file
+        service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
+        # Project id
+        project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+        # Debug action
+        debug: true # optional, default is 
+        # Path to the yaml file
+        # gae_config_path: # default is ./app.yaml
+        # Disable cache
+        # no_cache: # optional
