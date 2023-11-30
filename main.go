@@ -49,10 +49,10 @@ func main() {
 						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
 						msg.ReplyToMessageID = update.Message.MessageID
 
-						_, err := bot.Send(msg)
+						_, sendErr := bot.Send(msg)
 
-						if err != nil {
-							return
+						if sendErr != nil {
+							continue
 						}
 						continue
 					}
@@ -70,7 +70,13 @@ func main() {
 					if err != nil {
 						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
 						msg.ReplyToMessageID = update.Message.MessageID
-						bot.Send(msg)
+
+						_, sendErr := bot.Send(msg)
+
+						if sendErr != nil {
+							continue
+						}
+
 						continue
 					}
 
@@ -79,10 +85,10 @@ func main() {
 					msg.Text = "I don't know that command"
 				}
 
-				_, err := bot.Send(msg)
+				_, sendErr := bot.Send(msg)
 
-				if err != nil {
-					return
+				if sendErr != nil {
+					continue
 				}
 
 				continue
@@ -97,10 +103,11 @@ func main() {
 					if err != nil {
 						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
 						msg.ReplyToMessageID = update.Message.MessageID
-						_, err := bot.Send(msg)
 
-						if err != nil {
-							return
+						_, sendErr := bot.Send(msg)
+
+						if sendErr != nil {
+							continue
 						}
 
 						continue
@@ -113,10 +120,10 @@ func main() {
 					if err != nil {
 						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
 						msg.ReplyToMessageID = update.Message.MessageID
-						_, err := bot.Send(msg)
+						_, sendErr := bot.Send(msg)
 
-						if err != nil {
-							return
+						if sendErr != nil {
+							continue
 						}
 
 						continue
@@ -134,10 +141,10 @@ func main() {
 				}
 			}
 
-			_, err := bot.Send(msg)
+			_, sendErr := bot.Send(msg)
 
-			if err != nil {
-				return
+			if sendErr != nil {
+				continue
 			}
 
 		}
