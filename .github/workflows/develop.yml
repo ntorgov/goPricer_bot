@@ -23,16 +23,16 @@ jobs:
         go-version: '1.21'
 
     - name: Build
-      run: go env -w GO111MODULE=auto & 
-           go mod init &
-           go build -v ./...
+      run: go build -v ./...
   tests:
     runs-on: ubuntu-latest
     needs:
       - build
     steps:
     - name: Test
-      run: go test -json ./.. -coverprofile coverage.out -covermode atomic -v .
+      run: go env -w GO111MODULE=auto &
+           go mod init &
+           go test -json ./.. -coverprofile coverage.out -covermode atomic -v .
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
