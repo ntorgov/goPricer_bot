@@ -31,7 +31,6 @@ jobs:
     steps:
     - name: Prepare
 
-      env: { GO111MODULE=auto }
       run:  go mod init &
           go mod tidy
     - name: Test
