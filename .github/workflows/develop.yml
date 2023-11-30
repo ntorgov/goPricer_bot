@@ -30,7 +30,10 @@ jobs:
       - build
     steps:
     - name: Test
-      run: go test -v -json ./... -coverprofile=coverage.out -covermode=atomic
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+      run: go test -v ./... -coverprofile=coverage.out -covermode=atomic
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
