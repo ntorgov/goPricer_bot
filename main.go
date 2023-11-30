@@ -3,12 +3,9 @@ package main
 import (
 	"Pricer/internal"
 	"fmt"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"os"
-	"strconv"
-	"strings"
-
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func main() {
@@ -44,6 +41,8 @@ func main() {
 					msg.Text = "Формат ввода *Вес на ценнике*, через пробел, *Цена за этот вес*"
 				case "status":
 					msg.Text = "I'm ok."
+				case "price":
+					msg.Text = "Формат ввода *Вес на ценнике*, через пробел, *Цена за этот вес*"
 				default:
 					msg.Text = "I don't know that command"
 				}
@@ -54,26 +53,10 @@ func main() {
 			}
 
 			if !update.Message.IsCommand() {
-				command := strings.Split(update.Message.Text, " ")
+				priceVolume, priceValue, err := internal.CommandParser(update.Message.Text) // strings.Split(update.Message.Text, " ")
 
-				if len(command) < 2 {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Ошибка конвертирования")
-					msg.ReplyToMessageID = update.Message.MessageID
-					bot.Send(msg)
-					continue
-				}
-
-				priceVolume, err := strconv.ParseFloat(command[0], 64)
 				if err != nil {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял параметр #1...")
-					msg.ReplyToMessageID = update.Message.MessageID
-					bot.Send(msg)
-					continue
-				}
-
-				priceValue, err := strconv.ParseFloat(command[1], 64)
-				if err != nil {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял параметр #2...")
+					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
 					msg.ReplyToMessageID = update.Message.MessageID
 					bot.Send(msg)
 					continue
