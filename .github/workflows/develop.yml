@@ -31,7 +31,8 @@ jobs:
     steps:
     - name: Prepare
 
-      run:  go mod init &
+      run: ls -l &  
+          go mod init &
           go mod tidy
     - name: Test
       run: go test -json ../... -coverprofile coverage.out -covermode atomic -v .
