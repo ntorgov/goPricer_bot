@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Pricer/internal"
 	"fmt"
 	"log"
 	"os"
@@ -80,7 +81,7 @@ func main() {
 
 				// region Price calculation
 
-				normalPrice := priceValue * 1000 / priceVolume
+				normalPrice := internal.CalculateCleanPrice(priceVolume, priceValue)
 
 				log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
