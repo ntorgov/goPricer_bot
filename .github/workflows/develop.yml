@@ -32,7 +32,8 @@ jobs:
     - name: Prepare
 
       run: cd .. &
-          ls -l &  
+          ls -l &
+          go env -w GO111MODULE=auto &
           go mod init &
           go mod tidy
     - name: Test
