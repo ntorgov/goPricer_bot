@@ -28,6 +28,8 @@ jobs:
            go build -v ./...
   tests:
     runs-on: ubuntu-latest
+    needs:
+      - build
     steps:
     - name: Test
       run: go test -json ./.. -coverprofile coverage.out -covermode atomic -v .
