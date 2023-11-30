@@ -1,9 +1,7 @@
 package internal
 
-/**
- * CalculateCleanPrice calculates the clean price
- */
+// CalculateCleanPrice
 func CalculateCleanPrice(volume float64, price float64) float64 {
-	cleanPrice := volume * 1000 / price
+	cleanPrice := price * 1000.0 / volume
 	return cleanPrice
 }
