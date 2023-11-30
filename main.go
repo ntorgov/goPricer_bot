@@ -1,13 +1,12 @@
 package main
 
 import (
+	"Pricer/internal"
 	"fmt"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"log"
 	"os"
-	"strconv"
 	"strings"
-
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func main() {
@@ -43,53 +42,110 @@ func main() {
 					msg.Text = "Формат ввода *Вес на ценнике*, через пробел, *Цена за этот вес*"
 				case "status":
 					msg.Text = "I'm ok."
+				case "price":
+					priceVolume, priceValue, err := internal.CommandParser(update.Message.Text) // strings.Split(update.Message.Text, " ")
+
+					if err != nil {
+						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
+						msg.ReplyToMessageID = update.Message.MessageID
+
+						_, sendErr := bot.Send(msg)
+
+						if sendErr != nil {
+							continue
+						}
+						continue
+					}
+
+					// region Price calculation
+
+					normalPrice := internal.CalculateCleanPrice(priceVolume, priceValue)
+
+					msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Цена за 1000 единиц: %.2f", normalPrice))
+				case "pizza":
+					diameter, price, err := internal.CommandParser(update.Message.Text)
+
+					area, piecePrice, err := internal.CalculatePizzaPrice(diameter, price)
+
+					if err != nil {
+						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
+						msg.ReplyToMessageID = update.Message.MessageID
+
+						_, sendErr := bot.Send(msg)
+
+						if sendErr != nil {
+							continue
+						}
+
+						continue
+					}
+
+					msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Площадь: %.2fсм^2, Цена за сантиметр: %.2f", area, piecePrice))
 				default:
 					msg.Text = "I don't know that command"
 				}
 
-				bot.Send(msg)
+				_, sendErr := bot.Send(msg)
+
+				if sendErr != nil {
+					continue
+				}
 
 				continue
 			}
 
 			if !update.Message.IsCommand() {
-				command := strings.Split(update.Message.Text, " ")
+				if strings.Contains(update.Message.Text, "пицца") {
+					diameter, price, err := internal.CommandParser(update.Message.Text)
 
-				if len(command) < 2 {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Ошибка конвертирования")
-					msg.ReplyToMessageID = update.Message.MessageID
-					bot.Send(msg)
-					continue
+					area, piecePrice, err := internal.CalculatePizzaPrice(diameter, price)
+
+					if err != nil {
+						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
+						msg.ReplyToMessageID = update.Message.MessageID
+
+						_, sendErr := bot.Send(msg)
+
+						if sendErr != nil {
+							continue
+						}
+
+						continue
+					}
+
+					msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Площадь: %.2fсм^2, Цена за сантиметр: %.2f", area, piecePrice))
+				} else {
+					priceVolume, priceValue, err := internal.CommandParser(update.Message.Text) // strings.Split(update.Message.Text, " ")
+
+					if err != nil {
+						msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял...")
+						msg.ReplyToMessageID = update.Message.MessageID
+						_, sendErr := bot.Send(msg)
+
+						if sendErr != nil {
+							continue
+						}
+
+						continue
+					}
+
+					// region Price calculation
+
+					normalPrice := internal.CalculateCleanPrice(priceVolume, priceValue)
+
+					log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+
+					msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Цена за 1000 единиц: %.2f", normalPrice))
+
+					// endregion
 				}
-
-				priceVolume, err := strconv.ParseFloat(command[0], 64)
-				if err != nil {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял параметр #1...")
-					msg.ReplyToMessageID = update.Message.MessageID
-					bot.Send(msg)
-					continue
-				}
-
-				priceValue, err := strconv.ParseFloat(command[1], 64)
-				if err != nil {
-					msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Не понял параметр #2...")
-					msg.ReplyToMessageID = update.Message.MessageID
-					bot.Send(msg)
-					continue
-				}
-
-				// region Price calculation
-
-				normalPrice := priceValue * 1000 / priceVolume
-
-				log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
-
-				msg = tgbotapi.NewMessage(update.Message.Chat.ID, fmt.Sprintf("Цена за 1000 единиц: %.2f", normalPrice))
-
-				// endregion
 			}
 
-			bot.Send(msg)
+			_, sendErr := bot.Send(msg)
+
+			if sendErr != nil {
+				continue
+			}
 
 		}
 	}
